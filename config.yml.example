@@ -1,0 +1,15 @@
+version: 1
+
+config:
+    AuthToken: 
+
+server:
+    ID: 21
+    Provider: digitalOcean2
+    CredentialID: 4444
+    Name: Test 
+    Size: 34MB
+    Database:
+    Region: NewYork1
+    PhpVersion: 71
+    RecipeId:
