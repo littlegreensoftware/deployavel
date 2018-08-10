@@ -3,7 +3,7 @@ package api_test
 import (
 	"testing"
 
-	"bitbucket.org/littlegreensoftware/deployavel/api"
+	"github.com/littlegreensoftware/deployavel/api"
 )
 
 func TestGlobalHTTPClient(t *testing.T) {

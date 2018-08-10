@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"bitbucket.org/littlegreensoftware/deployavel/config"
+	"github.com/littlegreensoftware/deployavel/config"
 )
 
 var client Client

@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"bitbucket.org/littlegreensoftware/deployavel/api"
+	"github.com/littlegreensoftware/deployavel/api"
 )
 
 // MockHTTPClient mocks an http client

@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"bitbucket.org/littlegreensoftware/deployavel/api"
+	"github.com/littlegreensoftware/deployavel/api"
 	"github.com/spf13/cobra"
 	yaml "gopkg.in/yaml.v2"
 )

@@ -1,6 +1,6 @@
 package main
 
-import "bitbucket.org/littlegreensoftware/deployavel/cmd"
+import "github.com/littlegreensoftware/deployavel/cmd"
 
 func main() {
 	cmd.Execute()

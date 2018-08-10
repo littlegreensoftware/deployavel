@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"bitbucket.org/littlegreensoftware/deployavel/api"
+	"github.com/littlegreensoftware/deployavel/api"
 )
 
 func TestRequestError(t *testing.T) {

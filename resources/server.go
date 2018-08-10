@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"bitbucket.org/littlegreensoftware/deployavel/api"
+	"github.com/littlegreensoftware/deployavel/api"
 )
 
 // ServerRequest models input from yml files

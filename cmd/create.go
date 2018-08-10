@@ -3,7 +3,7 @@ package cmd
 import (
 	"log"
 
-	"bitbucket.org/littlegreensoftware/deployavel/resources"
+	"github.com/littlegreensoftware/deployavel/resources"
 	"github.com/spf13/cobra"
 	yaml "gopkg.in/yaml.v2"
 )
