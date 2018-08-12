@@ -9,23 +9,45 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+var id int
+
+func init() {
+	serverGetCmd.PersistentFlags().IntVarP(&id, "id", "i", 0, "Id of Server")
+	createOpCacheCmd.PersistentFlags().IntVarP(&id, "id", "i", 0, "Id of Server")
+	deleteOpCacheCmd.PersistentFlags().IntVarP(&id, "id", "i", 0, "Id of Server")
+}
+
 var createOpCacheCmd = &cobra.Command{
 	Use:   "opcache",
 	Short: "Enable opcache for a server on forge",
 	Long: `Create will issue a POST request to Forge to enable opcache:
 	
-	deployavel create opcache --id some_id
-	deployavel create opcache -i some_id`,
+$deployavel create opcache --id some_id
+$deployavel create opcache -i some_id
+`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var id int
-
-		cmd.PersistentFlags().IntVarP(&id, "id", "i", 0, "Id of Server")
-
 		if err := resources.EnableOpCache(r, id); err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Println("Successfully enabled OP Cache")
+		fmt.Println("Successfully enabled OPCache")
+	},
+}
+
+var deleteOpCacheCmd = &cobra.Command{
+	Use:   "opcache",
+	Short: "Disable opcache for a server on forge",
+	Long: `Delete will issue a DELETE request to Forge to disable opcache:
+	
+$deployavel delete opcache --id some_id
+$deployavel delete opcache -i some_id
+`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := resources.DisableOpCache(r, id); err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Println("Successfully disabled OPCache")
 	},
 }
 
@@ -34,8 +56,9 @@ var createServerCmd = &cobra.Command{
 	Short: "Create a single server in Forge",
 	Long: `Create will issue a POST request to Forge to create a server:
 	
-	deployavel get server --id some_id
-	deployavel get server -i some_id`,
+$deployavel create server --id some_id
+$deployavel create server -i some_id
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var serverCnf resources.ServerRequest
 
@@ -60,13 +83,10 @@ var serverGetCmd = &cobra.Command{
 	Short: "Get a single server from Forge",
 	Long: `Get will issue a GET request to Forge for a single server:
 	
-	deployavel get server --id some_id
-	deployavel get server -i some_id`,
+$deployavel get server --id some_id
+$deployavel get server -i some_id
+`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var id int
-
-		cmd.PersistentFlags().IntVarP(&id, "id", "i", 0, "Id of Server")
-
 		server, err := resources.ServerRead(r, id)
 		if err != nil {
 			log.Fatal(err)
@@ -83,8 +103,8 @@ var serverListCmd = &cobra.Command{
 	Short: "List all servers in Forge",
 	Long: `List will issue a GET request to Forge for all servers:
 	
-	$deployavel list server
-	`,
+$deployavel list server
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		servers, err := resources.ServerList(r)
 		if err != nil {
