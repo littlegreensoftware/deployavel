@@ -3,42 +3,24 @@ package api_test
 import (
 	"fmt"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/littlegreensoftware/deployavel/api"
+	"github.com/littlegreensoftware/deployavel/mocks"
 )
 
-// MockHTTPClient mocks an http client
-func MockHTTPClient(url string) api.Client {
-	return api.Client{
-		Client: *http.DefaultClient,
-		URL:    url,
-	}
-}
-
-// DefaultTestServer creates a new http server
-func DefaultTestServer() *httptest.Server {
-	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		res.WriteHeader(http.StatusOK)
-		res.Write([]byte("body"))
-	}))
-
-	return testServer
-}
-
 func TestForgeRequestGet(t *testing.T) {
-	testServer := DefaultTestServer()
+	testServer := mocks.DefaultTestServer()
 	defer testServer.Close()
 
 	fr := api.ForgeRequest{
 		Token:  "eyJ0eXAiOiJKV1QiLCJhbGc",
-		Client: MockHTTPClient(testServer.URL),
+		Client: mocks.MockHTTPClient(testServer.URL),
 	}
 
 	res, err := fr.Get("servers/1")
 	if err != nil {
-		t.Fail()
+		t.Errorf("Should not include an error: %v", err)
 	}
 
 	if res.StatusCode == 0 {
@@ -51,17 +33,17 @@ func TestForgeRequestGet(t *testing.T) {
 }
 
 func TestForgeRequestPost(t *testing.T) {
-	testServer := DefaultTestServer()
+	testServer := mocks.DefaultTestServer()
 	defer testServer.Close()
 
 	fr := api.ForgeRequest{
 		Token:  "ieyJ0eXAiOiJKV1QiLCJhbGc",
-		Client: MockHTTPClient(testServer.URL),
+		Client: mocks.MockHTTPClient(testServer.URL),
 	}
 
 	res, err := fr.Post("servers", []byte("body"))
 	if err != nil {
-		t.Fail()
+		t.Errorf("Should not return an error: %v", err)
 	}
 
 	if res.StatusCode == 0 {
@@ -74,17 +56,17 @@ func TestForgeRequestPost(t *testing.T) {
 }
 
 func TestForgeRequestDelete(t *testing.T) {
-	testServer := DefaultTestServer()
+	testServer := mocks.DefaultTestServer()
 	defer testServer.Close()
 
 	fr := api.ForgeRequest{
 		Token:  "ieyJ0eXAiOiJKV1QiLCJhbGc",
-		Client: MockHTTPClient(testServer.URL),
+		Client: mocks.MockHTTPClient(testServer.URL),
 	}
 
 	res, err := fr.Delete("servers")
 	if err != nil {
-		t.Fail()
+		t.Errorf("Should return an error: %v", err)
 	}
 
 	if res.StatusCode == 0 {
@@ -108,12 +90,12 @@ func TestForgeRequestMakeRequest(t *testing.T) {
 
 	fr := api.ForgeRequest{
 		Token:  token,
-		Client: MockHTTPClient(url),
+		Client: mocks.MockHTTPClient(url),
 	}
 
 	request, err := fr.MakeRequest(http.MethodGet, endpoint, "data")
 	if err != nil {
-		t.Fail()
+		t.Errorf("Should not return an error: %v", err)
 	}
 
 	if request.URL.Path != fmt.Sprintf("%s/%s", url, endpoint) {
@@ -146,7 +128,7 @@ func TestForgeRequestMakeRequestWithBadInput(t *testing.T) {
 	for in := range input {
 		fr := api.ForgeRequest{
 			Token:  input[in]["token"],
-			Client: MockHTTPClient(input[in]["url"]),
+			Client: mocks.MockHTTPClient(input[in]["url"]),
 		}
 
 		_, err := fr.MakeRequest(input[in]["method"], input[in]["endpoint"], "data")

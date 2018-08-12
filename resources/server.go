@@ -119,19 +119,6 @@ func ServerUpdate(r api.Request, id int) error {
 	return nil
 }
 
-// ServerDelete a server from forge
-func ServerDelete(r api.Request, id int) error {
-	resp, err := r.Delete("servers/" + strconv.Itoa(id))
-	if err != nil {
-		return err
-	}
-	if resp.StatusCode != http.StatusOK {
-		return api.RequestError(resp.StatusCode)
-	}
-
-	return nil
-}
-
 // ServerList all servers on forge
 func ServerList(r api.Request) (ServerListResponse, error) {
 	var list ServerListResponse
@@ -148,6 +135,26 @@ func ServerList(r api.Request) (ServerListResponse, error) {
 	err = parseResponse(resp, &list)
 
 	return list, err
+}
+
+// EnableOpCache enables opcache for a specific server
+func EnableOpCache(r api.Request, id int) error {
+	resp, err := r.Post("servers/"+strconv.Itoa(id)+"/php/opcache", nil)
+	if resp.StatusCode != http.StatusOK {
+		return api.RequestError(resp.StatusCode)
+	}
+
+	return err
+}
+
+// DisableOpCache disables opcache for a specific server
+func DisableOpCache(r api.Request, id int) error {
+	resp, err := r.Delete("servers/" + strconv.Itoa(id) + "/php/opcache")
+	if resp.StatusCode != http.StatusOK {
+		return api.RequestError(resp.StatusCode)
+	}
+
+	return err
 }
 
 func parseResponse(resp *http.Response, data interface{}) error {
