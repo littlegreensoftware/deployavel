@@ -12,6 +12,7 @@ Usage:
 Available Commands:
 
   - ```create``` Create a single resource in Forge
+  - ```delete``` Delete a single resource in Forge
   - ```get``` Get a single resource in Forge
   - ```help``` Help about any command
   - ```list``` List all resources of a specific type in Forge
