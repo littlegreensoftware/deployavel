@@ -78,39 +78,39 @@ func (s Server) Marshal() ([]byte, error) {
 }
 
 // ServerCreate a server on forge
-func ServerCreate(r api.Request, data interface{}) (CreatedServer, error) {
+func ServerCreate(r api.Request, data interface{}) (*CreatedServer, error) {
 	var created CreatedServer
 
 	resp, err := r.Post("servers", data)
 	if err != nil {
-		return CreatedServer{}, nil
+		return nil, err
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return CreatedServer{}, api.RequestError(resp.StatusCode)
+		return nil, api.RequestError(resp.StatusCode)
 	}
 
 	err = ParseResource(resp, &created)
 
-	return created, err
+	return &created, err
 }
 
 // ServerRead a single server from forge
-func ServerRead(r api.Request, id int) (Server, error) {
+func ServerRead(r api.Request, id int) (*Server, error) {
 	var serv ServerResponse
 
 	resp, err := r.Get("servers/" + strconv.Itoa(id))
 	if err != nil {
-		return Server{}, err
+		return nil, err
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return Server{}, api.RequestError(resp.StatusCode)
+		return nil, api.RequestError(resp.StatusCode)
 	}
 
 	err = ParseResource(resp, &serv)
 
-	return serv.Server, err
+	return &serv.Server, err
 }
 
 // ServerUpdate a server from forge
@@ -119,21 +119,21 @@ func ServerUpdate(r api.Request, id int) error {
 }
 
 // ServerList all servers on forge
-func ServerList(r api.Request) (ServerListResponse, error) {
+func ServerList(r api.Request) (*ServerListResponse, error) {
 	var list ServerListResponse
 
 	resp, err := r.Get("servers")
 	if err != nil {
-		return ServerListResponse{}, err
+		return nil, err
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return ServerListResponse{}, api.RequestError(resp.StatusCode)
+		return nil, api.RequestError(resp.StatusCode)
 	}
 
 	err = ParseResource(resp, &list)
 
-	return list, err
+	return &list, err
 }
 
 // EnableOpCache enables opcache for a specific server

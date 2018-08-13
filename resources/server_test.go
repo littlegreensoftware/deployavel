@@ -31,7 +31,7 @@ func ServerList(t *testing.T) {
 		t.Errorf("Should not have an error: %v", err)
 	}
 
-	if len(servers.All) == 0 {
+	if servers == nil {
 		t.Error("Should have servers")
 	}
 }
@@ -45,7 +45,7 @@ func ServerListErrors(t *testing.T) {
 			t.Errorf("Should have an error")
 		}
 
-		if len(servers.All) != 0 {
+		if servers != nil {
 			t.Error("Should not have a server")
 		}
 	}
@@ -62,7 +62,7 @@ func ServerRead(t *testing.T) {
 		t.Error("Should not have an error")
 	}
 
-	if server.ID == 0 {
+	if server == nil {
 		t.Error("Should have a non zero server")
 	}
 }
@@ -76,7 +76,7 @@ func ServerReadErrors(t *testing.T) {
 			t.Errorf("Should have an error")
 		}
 
-		if server.ID != 0 {
+		if server != nil {
 			t.Error("Should not have a server")
 		}
 	}
