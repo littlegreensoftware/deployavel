@@ -10,6 +10,8 @@ import (
 	"github.com/littlegreensoftware/deployavel/resources"
 )
 
+var data *os.File
+
 var errors = map[string]int{
 	"bad_request":           http.StatusBadRequest,
 	"unauthorized":          http.StatusUnauthorized,
@@ -21,10 +23,7 @@ var errors = map[string]int{
 	"server_error":          1000,
 }
 
-func TestServerList(t *testing.T) {
-	data := JsonData("servers.json")
-	defer data.Close()
-
+func ServerList(t *testing.T) {
 	r := mocks.MakeMockAPIRequest(data, http.StatusOK)
 
 	servers, err := resources.ServerList(r)
@@ -37,10 +36,7 @@ func TestServerList(t *testing.T) {
 	}
 }
 
-func TestServerListErrors(t *testing.T) {
-	data := JsonData("servers.json")
-	defer data.Close()
-
+func ServerListErrors(t *testing.T) {
 	for key := range errors {
 		r := mocks.MakeMockAPIRequest(data, errors[key])
 
@@ -55,11 +51,11 @@ func TestServerListErrors(t *testing.T) {
 	}
 }
 
-func TestServerGet(t *testing.T) {
-	data := JsonData("server.json")
-	defer data.Close()
+func ServerRead(t *testing.T) {
+	serverData := JsonData("server.json")
+	defer serverData.Close()
 
-	r := mocks.MakeMockAPIRequest(data, http.StatusOK)
+	r := mocks.MakeMockAPIRequest(serverData, http.StatusOK)
 
 	server, err := resources.ServerRead(r, 100)
 	if err != nil {
@@ -71,10 +67,7 @@ func TestServerGet(t *testing.T) {
 	}
 }
 
-func TestServerReadErrors(t *testing.T) {
-	data := JsonData("server.json")
-	defer data.Close()
-
+func ServerReadErrors(t *testing.T) {
 	for key := range errors {
 		r := mocks.MakeMockAPIRequest(data, errors[key])
 
@@ -89,10 +82,7 @@ func TestServerReadErrors(t *testing.T) {
 	}
 }
 
-func TestServerEnableOpCache(t *testing.T) {
-	data := JsonData("ok.json")
-	defer data.Close()
-
+func ServerEnableOpCache(t *testing.T) {
 	r := mocks.MakeMockAPIRequest(data, http.StatusOK)
 
 	err := resources.EnableOpCache(r, 100)
@@ -101,10 +91,7 @@ func TestServerEnableOpCache(t *testing.T) {
 	}
 }
 
-func TestServerEnableOpCacheErrors(t *testing.T) {
-	data := JsonData("ok.json")
-	defer data.Close()
-
+func ServerEnableOpCacheErrors(t *testing.T) {
 	for key := range errors {
 		r := mocks.MakeMockAPIRequest(data, errors[key])
 
@@ -115,10 +102,7 @@ func TestServerEnableOpCacheErrors(t *testing.T) {
 	}
 }
 
-func TestServerDisableOpCache(t *testing.T) {
-	data := JsonData("ok.json")
-	defer data.Close()
-
+func ServerDisableOpCache(t *testing.T) {
 	r := mocks.MakeMockAPIRequest(data, http.StatusOK)
 
 	err := resources.DisableOpCache(r, 100)
@@ -127,10 +111,7 @@ func TestServerDisableOpCache(t *testing.T) {
 	}
 }
 
-func TestServerDisableOpCacheErrors(t *testing.T) {
-	data := JsonData("ok.json")
-	defer data.Close()
-
+func ServerDisableOpCacheErrors(t *testing.T) {
 	for key := range errors {
 		r := mocks.MakeMockAPIRequest(data, errors[key])
 
@@ -139,6 +120,20 @@ func TestServerDisableOpCacheErrors(t *testing.T) {
 			t.Errorf("Should have an error")
 		}
 	}
+}
+
+func TestServerSetup(t *testing.T) {
+	data = JsonData("servers.json")
+	defer data.Close()
+
+	t.Run("should list all servers", ServerList)
+	t.Run("should hanlde list all server errors", ServerListErrors)
+	t.Run("should get a single server", ServerRead)
+	t.Run("should handle a single server error", ServerReadErrors)
+	t.Run("should enable opcache", ServerEnableOpCache)
+	t.Run("should handle opcache enable errors", ServerEnableOpCacheErrors)
+	t.Run("should disable opcache", ServerDisableOpCache)
+	t.Run("should handle opcache disable errors", ServerDisableOpCacheErrors)
 }
 
 // JsonData returns a file pointer to data
