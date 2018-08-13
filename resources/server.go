@@ -2,7 +2,6 @@ package resources
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -91,7 +90,7 @@ func ServerCreate(r api.Request, data interface{}) (CreatedServer, error) {
 		return CreatedServer{}, api.RequestError(resp.StatusCode)
 	}
 
-	err = parseResponse(resp, &created)
+	err = ParseResource(resp, &created)
 
 	return created, err
 }
@@ -109,7 +108,7 @@ func ServerRead(r api.Request, id int) (Server, error) {
 		return Server{}, api.RequestError(resp.StatusCode)
 	}
 
-	err = parseResponse(resp, &serv)
+	err = ParseResource(resp, &serv)
 
 	return serv.Server, err
 }
@@ -132,7 +131,7 @@ func ServerList(r api.Request) (ServerListResponse, error) {
 		return ServerListResponse{}, api.RequestError(resp.StatusCode)
 	}
 
-	err = parseResponse(resp, &list)
+	err = ParseResource(resp, &list)
 
 	return list, err
 }
@@ -155,14 +154,4 @@ func DisableOpCache(r api.Request, id int) error {
 	}
 
 	return err
-}
-
-func parseResponse(resp *http.Response, data interface{}) error {
-	bytes, err := ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
-	if err != nil {
-		return err
-	}
-
-	return json.Unmarshal(bytes, data)
 }
