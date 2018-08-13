@@ -3,16 +3,16 @@ package api_test
 import (
 	"fmt"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/littlegreensoftware/deployavel/api"
 	"github.com/littlegreensoftware/deployavel/mocks"
 )
 
-func TestForgeRequestGet(t *testing.T) {
-	testServer := mocks.DefaultTestServer()
-	defer testServer.Close()
+var testServer *httptest.Server
 
+func forgeRequestGet(t *testing.T) {
 	fr := api.ForgeRequest{
 		Token:  "eyJ0eXAiOiJKV1QiLCJhbGc",
 		Client: mocks.MockHTTPClient(testServer.URL),
@@ -32,9 +32,7 @@ func TestForgeRequestGet(t *testing.T) {
 	}
 }
 
-func TestForgeRequestPost(t *testing.T) {
-	testServer := mocks.DefaultTestServer()
-	defer testServer.Close()
+func forgeRequestPost(t *testing.T) {
 
 	fr := api.ForgeRequest{
 		Token:  "ieyJ0eXAiOiJKV1QiLCJhbGc",
@@ -55,10 +53,7 @@ func TestForgeRequestPost(t *testing.T) {
 	}
 }
 
-func TestForgeRequestDelete(t *testing.T) {
-	testServer := mocks.DefaultTestServer()
-	defer testServer.Close()
-
+func forgeRequestDelete(t *testing.T) {
 	fr := api.ForgeRequest{
 		Token:  "ieyJ0eXAiOiJKV1QiLCJhbGc",
 		Client: mocks.MockHTTPClient(testServer.URL),
@@ -78,7 +73,7 @@ func TestForgeRequestDelete(t *testing.T) {
 	}
 }
 
-func TestForgeRequestMakeRequest(t *testing.T) {
+func forgeRequestMakeRequest(t *testing.T) {
 	url := "test.com"
 	endpoint := "servers"
 	token := "ieyJ0eXAiOiJKV1QiLCJhbGc"
@@ -109,7 +104,7 @@ func TestForgeRequestMakeRequest(t *testing.T) {
 	}
 }
 
-func TestForgeRequestMakeRequestWithBadInput(t *testing.T) {
+func forgeRequestMakeRequestWithBadInput(t *testing.T) {
 	input := map[string]map[string]string{
 		"invalid_url": map[string]string{
 			"method":   http.MethodGet,
@@ -137,4 +132,15 @@ func TestForgeRequestMakeRequestWithBadInput(t *testing.T) {
 			t.Errorf("Expected %s", in)
 		}
 	}
+}
+
+func TestForgeRequestSetup(t *testing.T) {
+	testServer = mocks.DefaultTestServer()
+	defer testServer.Close()
+
+	t.Run("should handle GET requests", forgeRequestGet)
+	t.Run("should handle POST requests", forgeRequestPost)
+	t.Run("should handle DELETE requests", forgeRequestDelete)
+	t.Run("should be able to make a request", forgeRequestMakeRequest)
+	t.Run("should handle bad input when making a request", forgeRequestMakeRequestWithBadInput)
 }
