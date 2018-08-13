@@ -13,3 +13,8 @@ server:
     Region: NewYork1
     PhpVersion: 71
     RecipeId:
+
+site:
+    Domain: site.com,
+    ProjectType: php,
+    Directory: /test

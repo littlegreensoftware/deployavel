@@ -41,19 +41,15 @@ type ServerResponse struct {
 
 // CreatedServer models successful server creation
 type CreatedServer struct {
+	BaseResource
 	Server       Server `json:"server"`
 	SudoPassword string `json:"sudo_password"`
 	DbPassword   string `json:"database_password"`
 }
 
-// Marshal the struct to a slice of bytes
-func (s CreatedServer) Marshal() ([]byte, error) {
-	data, err := json.Marshal(s)
-	return data, err
-}
-
 // Server represents a single forge server
 type Server struct {
+	BaseResource
 	ID               int           `json:"id"`
 	CredentialID     int           `json:"credential_id"`
 	Name             string        `json:"name"`
@@ -69,12 +65,6 @@ type Server struct {
 	CreatedAt        string        `json:"created_at"`
 	IsReady          bool          `json:"is_ready"`
 	Network          []interface{} `json:"network"`
-}
-
-// Marshal the struct to a slice of bytes
-func (s Server) Marshal() ([]byte, error) {
-	data, err := json.Marshal(s)
-	return data, err
 }
 
 // ServerCreate a server on forge

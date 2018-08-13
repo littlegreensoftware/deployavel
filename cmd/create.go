@@ -18,4 +18,5 @@ func init() {
 	rootCmd.AddCommand(createCmd)
 	createCmd.AddCommand(createServerCmd)
 	createCmd.AddCommand(createOpCacheCmd)
+	createCmd.AddCommand(createSiteCmd)
 }
