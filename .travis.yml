@@ -5,3 +5,10 @@ go:
   - "1.9"
   - "1.10"
   - tip
+
+install:
+  - go get -u github.com/spf13/cobra
+
+script:
+  - make test lint
+  - go build ./...
