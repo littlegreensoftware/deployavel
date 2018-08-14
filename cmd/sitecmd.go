@@ -8,10 +8,10 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-var serverId int
+var serverID int
 
 func init() {
-	createSiteCmd.PersistentFlags().IntVarP(&serverId, "id", "i", 0, "Id of Server")
+	createSiteCmd.PersistentFlags().IntVarP(&serverID, "id", "i", 0, "Id of Server")
 }
 
 var createSiteCmd = &cobra.Command{
@@ -30,7 +30,7 @@ $deployavel create site -i some_id
 			log.Fatal(err)
 		}
 
-		site, err := resources.SiteCreate(r, serverId, serverCnf)
+		site, err := resources.SiteCreate(r, serverID, serverCnf)
 		if err != nil {
 			log.Fatal(err)
 		}
