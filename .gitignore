@@ -4,3 +4,5 @@ config.yml
 
 vendor/*
 !vendor/modules.txt
+
+cover.html
